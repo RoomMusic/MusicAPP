@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_music"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_music"
+        android:title="Music"
+        />
+    <item
+        android:id="@+id/action_folder"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_folder"
+        android:title="Folder"
+        />
+    <item
+        android:id="@+id/action_user"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_user"
+        android:title="User"
+        />
+    <item
+        android:id="@+id/action_share"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_share"
+        android:title="Share"
+       />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_share"
+        android:title="Share"
+        />
+
+
+
+</menu>
