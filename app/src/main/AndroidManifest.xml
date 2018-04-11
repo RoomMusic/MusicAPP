@@ -3,6 +3,7 @@
     package="com.example.vidiic.appmusic">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".login.HomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,6 +21,9 @@
         </activity>
         <activity android:name=".UserActivity" />
         <activity android:name=".AboutActivity" />
+        <activity android:name=".login.SignUpActivity"></activity>
+        <activity android:name=".login.LoginActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

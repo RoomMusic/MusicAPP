@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "124131255717",
+    "firebase_url": "https://roomusic-3eaf7.firebaseio.com",
+    "project_id": "roomusic-3eaf7",
+    "storage_bucket": "roomusic-3eaf7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124131255717:android:4a9f493d1d80aaba",
+        "android_client_info": {
+          "package_name": "com.example.vidiic.appmusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124131255717-4ipiuugbpjgob9lh3ell0cd8repdn28g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlTQWlsLYdrLnCzTH9I7s8_Ccxk-JpI2I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

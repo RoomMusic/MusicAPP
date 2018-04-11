@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.example.vidiic.appmusic.login.LoginActivity">
+
+    <EditText
+        android:id="@+id/userText"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordText"
+        android:layout_alignStart="@+id/passwordText"
+        android:layout_below="@+id/btnLogOut"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/nombreuser"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/passwordText"
+        android:layout_width="288dp"
+        android:layout_height="57dp"
+        android:layout_below="@+id/userText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/contrauser"
+        android:password="true"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passwordText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/boton" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:visibility="invisible"
+ />
+
+</RelativeLayout>
