@@ -57,6 +57,8 @@ public class SignUpActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
+
+
     private void registerUser() {
 
         final String userMail = userEmail.getText().toString();
@@ -77,7 +79,9 @@ public class SignUpActivity extends AppCompatActivity {
                         //usuario registrado completamente
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
+
                         saveUser(userMail, userPass);
+
                         Toast.makeText(SignUpActivity.this, "User Registered Succesfully", Toast.LENGTH_SHORT).show();
                     } else {
                         //usuario ya registrado
@@ -95,6 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("email", email);
         user.put("pass", pass);
         user.put("register date", new Date());
+        user.put("has registered", false);
 
         firebaseFirestore.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
