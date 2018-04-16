@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     AdapterSong adapter;
 
     AsyncTaskSong asyncTaskSong = new AsyncTaskSong(this);
-    AsyncTaskListSong asyncTaskListSong = new AsyncTaskListSong((AsyncTaskListSong.WeakReference) this);
+    //AsyncTaskListSong asyncTaskListSong = new AsyncTaskListSong((AsyncTaskListSong.WeakReference) this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

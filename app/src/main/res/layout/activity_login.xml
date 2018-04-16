@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context="com.example.vidiic.appmusic.login.LoginActivity">
 
     <EditText
@@ -15,8 +14,7 @@
         android:layout_alignStart="@+id/passwordText"
         android:layout_below="@+id/btnLogOut"
         android:layout_marginTop="55dp"
-        android:background="@drawable/nombreuser"
-        android:textSize="12sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/passwordText"
@@ -25,9 +23,8 @@
         android:layout_below="@+id/userText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:background="@drawable/contrauser"
         android:password="true"
-        android:textSize="12sp" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -43,7 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log Out"
-        android:visibility="invisible"
- />
+        android:visibility="invisible" />
 
 </RelativeLayout>
