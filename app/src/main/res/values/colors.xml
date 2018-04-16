@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#00695c</color>
     <color name="colorAccent">#b2dfdb</color>
     <color name="colorToolBar">#DAF0EE</color>
+    <color name="snow">#FBFBFB</color>
+    <color name="vanilla">#F0F0C9</color>
+    <color name="burnt">#7B2D26</color>
+    <color name="black">#f2f2f2</color>
+    <color name="fondo">#dedede</color>
+    <color name="menu">#4a4a4a</color>
 </resources>

@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.vidiic.appmusic.classes.Song;
 import com.example.vidiic.appmusic.songlist.AdapterSong;
+import com.example.vidiic.appmusic.songlist.AsyncTaskListSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -45,18 +46,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
     implements AsyncTaskSong.WeakReference{
 
+    private int value = 0;
     private static final int MY_PERMISSION_REQUEST = 1;
 
     List<Song> songs;
     RecyclerView rcSongs;
     AdapterSong adapter;
 
-   /* ArrayList<String> arrayList;
-    ListView listView;
-    ArrayAdapter<String> adapter;
-    MediaMetadataRetriever mediaMetadataRetriever;
-    byte[] art;*/
     AsyncTaskSong asyncTaskSong = new AsyncTaskSong(this);
+    AsyncTaskListSong asyncTaskListSong = new AsyncTaskListSong((AsyncTaskListSong.WeakReference) this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +63,8 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setSubtitle("Live Music");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         BottomNavigationViewEx bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
@@ -81,7 +82,13 @@ public class MainActivity extends AppCompatActivity
         }else {
 
             Log.i("Main","Entramos1");
-            asyncTaskSong.execute();
+//            if (value == 0){
+//                asyncTaskSong.execute();
+//                value = 1;
+//            }else {
+//                asyncTaskListSong.execute();
+//            }
+                asyncTaskSong.execute();
         }
     }
     @Override
@@ -109,62 +116,6 @@ public class MainActivity extends AppCompatActivity
         });
         rcSongs.setAdapter(adapter);
     }
-
-
-
-    /*public void doStuff(){
-        listView = (ListView) findViewById(R.id.listview);
-        arrayList = new ArrayList<>();
-        getMusic();
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, arrayList);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
-    }
-    public void getMusic(){
-        ContentResolver contentResolver = getContentResolver();
-        Uri songuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor songCursor =contentResolver.query(songuri,null,null,null,null);
-
-        if (songCursor != null && songCursor.moveToFirst()){
-            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-
-            //MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-            //mediaMetadataRetriever.setDataSource(MediaStore.Audio.Media.DATA);
-            // byte[] art = mediaMetadataRetriever.getEmbeddedPicture();
-            //Bitmap songimage = BitmapFactory.decodeByteArray(art,0,art.length);
-
-            int imagen = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-
-            do {
-                String currentTitle = songCursor.getString(songTitle);
-                String currentArtist = songCursor.getString(songArtist);
-                String currentImae = songCursor.getString(imagen);
-                mediaMetadataRetriever = new MediaMetadataRetriever();
-                mediaMetadataRetriever.setDataSource(currentImae);
-                //Bitmap songimage = BitmapFactory.decodeByteArray(art,0,art.length);
-                String currentImaes;
-                try{
-                    art = mediaMetadataRetriever.getEmbeddedPicture();
-                    Bitmap songimage = BitmapFactory.decodeByteArray(art,0,art.length);
-                    currentImaes = songimage.toString();
-                    Log.i("vidiiiiii",currentImae);
-
-                }catch (Exception e){
-                    currentImaes="a";
-                }
-                arrayList.add(currentTitle +"\n"+currentImaes);
-
-            }while (songCursor.moveToNext());
-        }
-    }*/
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
@@ -173,11 +124,10 @@ public class MainActivity extends AppCompatActivity
                     if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         Toast.makeText(this,"PermissionGranted",Toast.LENGTH_SHORT).show();
                         Log.i("Main","Entramos2");
-                        asyncTaskSong.execute();
+                        asyncTaskSong.execute( );
                     }
                 }else {
                     Toast.makeText(this,"PermissionDeneged",Toast.LENGTH_SHORT).show();
-
                     finish();
                 }
                 return;
@@ -195,14 +145,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.help:
-                Intent help = new Intent(this,AboutActivity.class);
-                startActivity(help);
+            case R.id.search_icon:
                 break;
-            case R.id.settings:
+            case R.id.user_icon:
                 break;
-            case R.id.update:
-                break;
+            case android.R.id.home:
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }
