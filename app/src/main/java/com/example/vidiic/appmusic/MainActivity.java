@@ -39,6 +39,7 @@ import com.example.vidiic.appmusic.songlist.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     //comprobamos si el usuario ya ha entrado antes o no
-                    boolean check = (boolean) task.getResult().getData().get("firstIn");
+                    boolean check = (boolean) map.get("firstIn");
 
                     //Log.d("sergio", map.get("email").toString());
 
@@ -120,17 +121,25 @@ public class MainActivity extends AppCompatActivity
                         Log.d("sergio", "no ha entrado");
 
                         //actualizamos el campo firstIn a TRUE
-                        check = true;
-
-
+                        firebaseFirestore.collection("users").document(map.get("email").toString()).
+                                update("firstIn", true).
+                                addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("sergio", "Campo actualizado");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("sergio", "Error al actualizar");
+                            }
+                        });
                         //actualizamos el usuario
 
 
                     }else{
                         //si ya ha entrado las recogemos de la base de datos
                         Log.d("sergio", "si ha entrado");
-
-
 
                     }
                 }
