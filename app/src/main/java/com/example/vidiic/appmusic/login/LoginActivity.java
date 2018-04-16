@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin, btnLogOut;
     private EditText userText, passwordText;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registerUser(){
 
-        String email = userText.getText().toString().trim();
+        final String email = userText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
 
 
@@ -87,7 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     //el usuario existe en la bbbd, correcto
                     Toast.makeText(LoginActivity.this, "Success.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    mainIntent.putExtra("email", email);
+                    startActivity(mainIntent);
                 }else{
                     //usuario no registrado, redirigir al signup
                     Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);

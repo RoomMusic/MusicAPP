@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vidiic.appmusic.R;
+import com.example.vidiic.appmusic.classes.User;
 import com.example.vidiic.appmusic.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -95,13 +96,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void saveUser(String email, String pass){
-        Map<String, Object> user = new HashMap<>();
+        /*Map<String, Object> user = new HashMap<>();
         user.put("email", email);
         user.put("pass", pass);
         user.put("register date", new Date());
-        user.put("has registered", false);
+        user.put("has registered", false);*/
 
-        firebaseFirestore.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        User user = new User(email, pass, new Date(), false);
+
+        firebaseFirestore.collection("users").document(user.getEmail()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(SignUpActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show();

@@ -34,13 +34,20 @@ import android.widget.Toast;
 
 
 import com.example.vidiic.appmusic.classes.Song;
+import com.example.vidiic.appmusic.classes.User;
 import com.example.vidiic.appmusic.songlist.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
     implements AsyncTaskSong.WeakReference{
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     List<Song> songs;
     RecyclerView rcSongs;
     AdapterSong adapter;
+    private FirebaseFirestore firebaseFirestore;
 
    /* ArrayList<String> arrayList;
     ListView listView;
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         BottomNavigationViewEx bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper bottomNavigationViewHelper = new BottomNavigationViewHelper();
@@ -83,6 +92,53 @@ public class MainActivity extends AppCompatActivity
             Log.i("Main","Entramos1");
             asyncTaskSong.execute();
         }
+
+        //obtenemos el email que hemos pasado desde la actividad login
+        String userEmail = getIntent().getExtras().getString("email");
+        //Log.d("sergio", userEmail);
+
+        //con esta sentencia obtenemos de la coleccion de usuario el documento con el email del usuario el cual contiene los datos de este
+        firebaseFirestore.collection("users").document(userEmail).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    //obtenemos los datos del usurio en un map
+                    Map<String, Object> map = task.getResult().getData();
+
+                    //Log.d("sergio", "" + task.getResult().getData().get("firstIn"));
+
+
+                    //comprobamos si el usuario ya ha entrado antes o no
+                    boolean check = (boolean) task.getResult().getData().get("firstIn");
+
+                    //Log.d("sergio", map.get("email").toString());
+
+                    //comprobar si el usuario ya habia entrado
+                    if (!check){
+                        //si no ha entrado obtenemos las canciones de su movil
+                        Log.d("sergio", "no ha entrado");
+
+                        //actualizamos el campo firstIn a TRUE
+                        check = true;
+
+
+                        //actualizamos el usuario
+
+
+                    }else{
+                        //si ya ha entrado las recogemos de la base de datos
+                        Log.d("sergio", "si ha entrado");
+
+
+
+                    }
+                }
+            }
+        });
+
+
+
     }
     @Override
     public Context getContext() {
@@ -92,7 +148,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void finished(List<Song> list) {
         Log.i("Main","EntramosFinsih");
-        Log.d("Main", "finished: "+list.size());
+        Log.d("Main", "finished: " + list.size());
 
         adapter = new AdapterSong(list,this);
         rcSongs = findViewById(R.id.recycler);
