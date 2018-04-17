@@ -1,6 +1,7 @@
 package com.example.vidiic.appmusic.classes;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Vidiic on 11/03/2018.
@@ -16,12 +17,19 @@ public class User {
     private String userSecondName;
     private boolean firstIn;
     private Date registerDate;
+    private List<Song> songList;
 
+    //constructor para cuando el usuario esta registrandose
     public User(String email, String password, Date registerDate, boolean firstIn) {
         this.email = email;
         this.password = password;
         this.registerDate = registerDate;
         this.firstIn = firstIn;
+    }
+
+    public User(String email, List<Song> list){
+        this.email = email;
+        this.songList = list;
     }
 
 

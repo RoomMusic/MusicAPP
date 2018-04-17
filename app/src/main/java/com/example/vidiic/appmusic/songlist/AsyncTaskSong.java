@@ -68,7 +68,7 @@ public class AsyncTaskSong extends AsyncTask<String,Integer,List<Song>> {
                    songimage = null ;
                 }
                 Song song = new Song(currentTitle,currentArtist,songimage);
-                Log.d("Main", "doInBackground: "+song.toString());
+                Log.d("Main", "doInBackground: " + song.toString());
                 songs.add(song);
 
             }while (songCursor.moveToNext());

@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.vidiic.appmusic.classes.Song;
 import com.example.vidiic.appmusic.classes.User;
+import com.example.vidiic.appmusic.login.LoginActivity;
 import com.example.vidiic.appmusic.songlist.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
@@ -42,6 +43,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView rcSongs;
     AdapterSong adapter;
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
 
    /* ArrayList<String> arrayList;
     ListView listView;
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity
     MediaMetadataRetriever mediaMetadataRetriever;
     byte[] art;*/
     AsyncTaskSong asyncTaskSong = new AsyncTaskSong(this);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +80,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
 
         BottomNavigationViewEx bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper bottomNavigationViewHelper = new BottomNavigationViewHelper();
@@ -116,6 +123,7 @@ public class MainActivity extends AppCompatActivity
                     //Log.d("sergio", map.get("email").toString());
 
                     //comprobar si el usuario ya habia entrado
+                    //actualizamos el usuario
                     if (!check){
                         //si no ha entrado obtenemos las canciones de su movil
                         Log.d("sergio", "no ha entrado");
@@ -134,7 +142,7 @@ public class MainActivity extends AppCompatActivity
                                 Log.d("sergio", "Error al actualizar");
                             }
                         });
-                        //actualizamos el usuario
+
 
 
                     }else{
@@ -165,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         rcSongs.setLayoutManager(layoutManager);
         rcSongs.setItemAnimator(new DefaultItemAnimator());
-        Log.i("Main","Adaptame ESTA");
+        Log.i("Main","Adaptame ESTA jajajja");
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,6 +275,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.settings:
                 break;
             case R.id.update:
+                break;
+            case R.id.log_out:
+                if (firebaseAuth.getCurrentUser() != null){
+                    firebaseAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(MainActivity.this, "Sesion cerrada.", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
