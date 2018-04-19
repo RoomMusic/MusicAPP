@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
             }else{
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST);
             }
+            //Log.i("Main", "entramos 0 ");
         }else {
 
             Log.i("Main","Entramos1");
@@ -105,8 +106,17 @@ public class MainActivity extends AppCompatActivity
         String userEmail = getIntent().getExtras().getString("email");
         //Log.d("sergio", userEmail);
 
+
+
+
+
+    }
+
+
+
+    private void checkUser(String email){
         //con esta sentencia obtenemos de la coleccion de usuario el documento con el email del usuario el cual contiene los datos de este
-        firebaseFirestore.collection("users").document(userEmail).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
@@ -125,18 +135,18 @@ public class MainActivity extends AppCompatActivity
                     //comprobar si el usuario ya habia entrado
                     //actualizamos el usuario
                     if (!check){
-                        //si no ha entrado obtenemos las canciones de su movil
+                        //si no ha entrado obtenemos las canciones de su movil y las guardamos en la bbdd
                         Log.d("sergio", "no ha entrado");
 
                         //actualizamos el campo firstIn a TRUE
                         firebaseFirestore.collection("users").document(map.get("email").toString()).
                                 update("firstIn", true).
                                 addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("sergio", "Campo actualizado");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("sergio", "Campo actualizado");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d("sergio", "Error al actualizar");
@@ -146,17 +156,16 @@ public class MainActivity extends AppCompatActivity
 
 
                     }else{
-                        //si ya ha entrado las recogemos de la base de datos
+                        //si ya ha entrado, obtenemos las canciones de la base de datos
                         Log.d("sergio", "si ha entrado");
 
                     }
                 }
             }
         });
-
-
-
     }
+
+
     @Override
     public Context getContext() {
         return this;
@@ -247,6 +256,12 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this,"PermissionGranted",Toast.LENGTH_SHORT).show();
                         Log.i("Main","Entramos2");
                         asyncTaskSong.execute();
+
+                        //cuando se da permiso para que acceda a nuestro contenido comprobamos si ha entrado ya a la app o no
+                        /*if(){
+
+                        }*/
+
                     }
                 }else {
                     Toast.makeText(this,"PermissionDeneged",Toast.LENGTH_SHORT).show();

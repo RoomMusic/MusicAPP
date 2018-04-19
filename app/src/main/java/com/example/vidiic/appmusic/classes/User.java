@@ -27,6 +27,7 @@ public class User {
         this.firstIn = firstIn;
     }
 
+    //constructor para cuando queremos guardar las canciones del usuario
     public User(String email, List<Song> list){
         this.email = email;
         this.songList = list;
