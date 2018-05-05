@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignup;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
         userPassword.setText("ssoo++");
         userPassRepetition.setText("ssoo++");
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerUser();
-            }
-        });
+        btnSignup.setOnClickListener(view -> registerUser());
 
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
@@ -96,28 +92,14 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void saveUser(String email, String pass){
-        /*Map<String, Object> user = new HashMap<>();
-        user.put("email", email);
-        user.put("pass", pass);
-        user.put("register date", new Date());
-        user.put("has registered", false);*/
 
-        User user = new User(email, pass, new Date(), false);
+        key = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        firebaseFirestore.collection("users").document(user.getEmail()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(SignUpActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignUpActivity.this, "Fallo", Toast.LENGTH_SHORT).show();
-            }
-        });
+        User user = new User(key, email, pass, new Date(), false);
 
-
-
+        firebaseFirestore.collection("users").document(key).set(user).
+                addOnSuccessListener(aVoid -> Toast.makeText(SignUpActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show()).
+                addOnFailureListener(e -> Toast.makeText(SignUpActivity.this, "Fallo", Toast.LENGTH_SHORT).show());
 
     }
 }

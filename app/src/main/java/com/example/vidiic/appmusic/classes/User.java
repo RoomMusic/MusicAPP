@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User {
 
-    private int userid;
+    private String userid;
     private String username;
     private String email;
     private String password;
@@ -20,19 +20,29 @@ public class User {
     private List<Song> songList;
 
     //constructor para cuando el usuario esta registrandose
-    public User(String email, String password, Date registerDate, boolean firstIn) {
+    public User(String userId, String email, String password, Date registerDate, boolean firstIn) {
+        this.userid = userId;
         this.email = email;
         this.password = password;
         this.registerDate = registerDate;
         this.firstIn = firstIn;
     }
 
-    //constructor para cuando queremos guardar las canciones del usuario
-    public User(String email, List<Song> list){
-        this.email = email;
-        this.songList = list;
+    public String getUserid() {
+        return userid;
     }
 
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getEmail() {
         return email;
@@ -48,5 +58,13 @@ public class User {
 
     public Date getRegisterDate() {
         return registerDate;
+    }
+
+    public List<Song> getSongList() {
+        return songList;
+    }
+
+    public void setSongList(List<Song> songList) {
+        this.songList = songList;
     }
 }

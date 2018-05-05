@@ -15,7 +15,6 @@
         android:layout_alignStart="@+id/passwordText"
         android:layout_below="@+id/btnLogOut"
         android:layout_marginTop="55dp"
-        android:background="@drawable/nombreuser"
         android:textSize="12sp" />
 
     <EditText
@@ -25,7 +24,6 @@
         android:layout_below="@+id/userText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:background="@drawable/contrauser"
         android:password="true"
         android:textSize="12sp" />
 

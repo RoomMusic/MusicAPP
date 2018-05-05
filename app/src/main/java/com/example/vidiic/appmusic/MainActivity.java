@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
@@ -44,16 +45,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-    implements AsyncTaskSong.WeakReference{
+        implements AsyncTaskSong.WeakReference {
 
     private static final int MY_PERMISSION_REQUEST = 1;
 
@@ -62,12 +65,17 @@ public class MainActivity extends AppCompatActivity
     AdapterSong adapter;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
+    private String userEmail;
+    private User u;
+    private String userKey;
+    private User userAux;
 
-   /* ArrayList<String> arrayList;
-    ListView listView;
-    ArrayAdapter<String> adapter;
-    MediaMetadataRetriever mediaMetadataRetriever;
-    byte[] art;*/
+    /* ArrayList<String> arrayList;
+     ListView listView;
+     ArrayAdapter<String> adapter;
+     MediaMetadataRetriever mediaMetadataRetriever;
+     byte[] art;*/
+
     AsyncTaskSong asyncTaskSong = new AsyncTaskSong(this);
 
 
@@ -76,90 +84,77 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
 
-        BottomNavigationViewEx bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
+        BottomNavigationViewEx bottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper bottomNavigationViewHelper = new BottomNavigationViewHelper();
         bottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
-        bottomNavigationViewHelper.organizeBottomNavigationView(bottomNavigationView,MainActivity.this);
+        bottomNavigationViewHelper.organizeBottomNavigationView(bottomNavigationView, MainActivity.this);
 
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST);
-            }else{
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
             //Log.i("Main", "entramos 0 ");
-        }else {
+        } else {
 
-            Log.i("Main","Entramos1");
+            Log.i("Main", "Entramos1");
             asyncTaskSong.execute();
         }
 
         //obtenemos el email que hemos pasado desde la actividad login
-        String userEmail = getIntent().getExtras().getString("email");
-        //Log.d("sergio", userEmail);
+        userEmail = getIntent().getExtras().getString("email");
+        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("sergio", userEmail + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-
+        checkUser(userKey);
 
 
     }
 
 
-
-    private void checkUser(String email){
+    private void checkUser(String userid) {
         //con esta sentencia obtenemos de la coleccion de usuario el documento con el email del usuario el cual contiene los datos de este
-        firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
+        firebaseFirestore.collection("users").document(userid).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
 
-                    //obtenemos los datos del usurio en un map
-                    Map<String, Object> map = task.getResult().getData();
+                //obtenemos los datos del usurio en un map
+                Map<String, Object> map = task.getResult().getData();
 
-                    //Log.d("sergio", "" + task.getResult().getData().get("firstIn"));
+                //Log.d("sergio", "" + task.getResult().getData().get("firstIn"));
 
 
-                    //comprobamos si el usuario ya ha entrado antes o no
-                    boolean check = (boolean) map.get("firstIn");
+                //comprobamos si el usuario ya ha entrado antes o no
+                boolean check = (boolean) map.get("firstIn");
 
-                    //Log.d("sergio", map.get("email").toString());
+                //Log.d("sergio", map.get("email").toString());
 
-                    //comprobar si el usuario ya habia entrado
-                    //actualizamos el usuario
-                    if (!check){
-                        //si no ha entrado obtenemos las canciones de su movil y las guardamos en la bbdd
-                        Log.d("sergio", "no ha entrado");
+                //comprobar si el usuario ya habia entrado
+                //actualizamos el usuario
+                if (!check) {
+                    //si no ha entrado obtenemos las canciones de su movil y las guardamos en la bbdd
+                    Log.d("sergio", "no ha entrado");
 
-                        //actualizamos el campo firstIn a TRUE
-                        firebaseFirestore.collection("users").document(map.get("email").toString()).
-                                update("firstIn", true).
-                                addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("sergio", "Campo actualizado");
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("sergio", "Error al actualizar");
-                            }
-                        });
+                    //actualizamos el campo firstIn a TRUE
+                    firebaseFirestore.collection("users").document(map.get("userid").toString()).
+                            update("firstIn", true).
+                            addOnSuccessListener(aVoid -> Log.d("sergio", "Campo actualizado")).
+                            addOnFailureListener(e -> Log.d("sergio", "Error al actualizar"));
+
+                } else {
+                    //si ya ha entrado, obtenemos las canciones de la base de datos
+                    Log.d("sergio", "si ha entrado");
 
 
-
-                    }else{
-                        //si ya ha entrado, obtenemos las canciones de la base de datos
-                        Log.d("sergio", "si ha entrado");
-
-                    }
                 }
             }
         });
@@ -173,23 +168,36 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void finished(List<Song> list) {
-        Log.i("Main","EntramosFinsih");
-        Log.d("Main", "finished: " + list.size());
 
-        adapter = new AdapterSong(list,this);
+        Log.i("Main", "EntramosFinsih");
+        Log.d("Main", "finished: " + list.toString());
+
+
+        adapter = new AdapterSong(list, this);
         rcSongs = findViewById(R.id.recycler);
         RecyclerView.LayoutManager layoutManager =
-            new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rcSongs.setLayoutManager(layoutManager);
         rcSongs.setItemAnimator(new DefaultItemAnimator());
-        Log.i("Main","Adaptame ESTA jajajja");
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Main", "onClick: clicl");
-            }
-        });
+        Log.i("Main", "Adaptame ESTA jajajja");
+        adapter.setOnClickListener(v -> Log.d("Main", "onClick: clicl"));
+
         rcSongs.setAdapter(adapter);
+
+        //Log.d("sergio", "emial: " + userAux.getEmail());
+
+        Map<String, Object> songs = new HashMap<>();
+
+        for (Song s : list) {
+            songs.put("song name", s.getName());
+            songs.put("song artist", s.getArtist());
+            //songs.put("image", s.getImageSong());
+
+            //guardamos las canciones del usuario
+            firebaseFirestore.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("songs").add(songs);
+        }
+
+
     }
 
 
@@ -249,12 +257,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case MY_PERMISSION_REQUEST:{
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(this,"PermissionGranted",Toast.LENGTH_SHORT).show();
-                        Log.i("Main","Entramos2");
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "PermissionGranted", Toast.LENGTH_SHORT).show();
+                        Log.i("Main", "Entramos2");
                         asyncTaskSong.execute();
 
                         //cuando se da permiso para que acceda a nuestro contenido comprobamos si ha entrado ya a la app o no
@@ -263,8 +271,8 @@ public class MainActivity extends AppCompatActivity
                         }*/
 
                     }
-                }else {
-                    Toast.makeText(this,"PermissionDeneged",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "PermissionDeneged", Toast.LENGTH_SHORT).show();
 
                     finish();
                 }
@@ -273,18 +281,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private User getUserByEmail(String userId) {
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        Log.d("sergio", "USER ID: " + userId);
+
+        firebaseFirestore.collection("users").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                u = documentSnapshot.toObject(User.class);
+                Log.d("sergio", "USER email: " + u.getEmail());
+            }
+        });
+
+
+        return u;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar,menu);
+        inflater.inflate(R.menu.menu_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.help:
-                Intent help = new Intent(this,AboutActivity.class);
+                Intent help = new Intent(this, AboutActivity.class);
                 startActivity(help);
                 break;
             case R.id.settings:
@@ -292,7 +317,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.update:
                 break;
             case R.id.log_out:
-                if (firebaseAuth.getCurrentUser() != null){
+                if (firebaseAuth.getCurrentUser() != null) {
                     firebaseAuth.signOut();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     Toast.makeText(MainActivity.this, "Sesion cerrada.", Toast.LENGTH_SHORT).show();
