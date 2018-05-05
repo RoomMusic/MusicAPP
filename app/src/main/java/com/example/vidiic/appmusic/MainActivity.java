@@ -48,6 +48,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity
     private User u;
     private String userKey;
     private User userAux;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
 
     /* ArrayList<String> arrayList;
      ListView listView;
@@ -76,7 +80,8 @@ public class MainActivity extends AppCompatActivity
      MediaMetadataRetriever mediaMetadataRetriever;
      byte[] art;*/
 
-    AsyncTaskSong asyncTaskSong = new AsyncTaskSong(this);
+
+    AsyncTaskSong asyncTaskSong;
 
 
     @Override
@@ -89,7 +94,12 @@ public class MainActivity extends AppCompatActivity
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
 
+        userEmail = getIntent().getExtras().getString("email");
+
+
+        asyncTaskSong = new AsyncTaskSong(this, userEmail);
 
         BottomNavigationViewEx bottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper bottomNavigationViewHelper = new BottomNavigationViewHelper();
@@ -111,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //obtenemos el email que hemos pasado desde la actividad login
-        userEmail = getIntent().getExtras().getString("email");
+
         userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Log.d("sergio", userEmail + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -196,6 +206,15 @@ public class MainActivity extends AppCompatActivity
             //guardamos las canciones del usuario
             firebaseFirestore.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("songs").add(songs);
         }
+
+
+        StorageReference storageReference = firebaseStorage.getReference();
+
+        StorageReference userMusicRef = storageReference.child(userEmail);
+
+
+
+
 
 
     }
