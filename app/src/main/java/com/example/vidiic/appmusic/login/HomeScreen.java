@@ -29,19 +29,9 @@ public class HomeScreen extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegistro = findViewById(R.id.btnRegistro);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomeScreen.this, LoginActivity.class));
-            }
-        });
+        btnLogin.setOnClickListener(view -> startActivity(new Intent(HomeScreen.this, LoginActivity.class)));
 
-        btnRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomeScreen.this, SignUpActivity.class));
-            }
-        });
+        btnRegistro.setOnClickListener(view -> startActivity(new Intent(HomeScreen.this, SignUpActivity.class)));
 
     }
 }

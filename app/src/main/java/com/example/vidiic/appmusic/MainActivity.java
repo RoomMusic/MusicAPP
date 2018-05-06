@@ -15,6 +15,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -105,6 +106,40 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationViewHelper bottomNavigationViewHelper = new BottomNavigationViewHelper();
         bottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
         bottomNavigationViewHelper.organizeBottomNavigationView(bottomNavigationView, MainActivity.this);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+
+            switch (item.getItemId()) {
+                case R.id.action_folder:
+
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+
+                    Toast.makeText(getContext(), "Action folder", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.action_music:
+
+
+                    Toast.makeText(getContext(), "Action music", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.action_share:
+
+
+                    Toast.makeText(getContext(), "Action share", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.action_user:
+
+
+                    Toast.makeText(getContext(), "Action user", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.action_settings:
+
+
+                    Toast.makeText(getContext(), "Action settings", Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+            return true;
+        });
 
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -203,18 +238,9 @@ public class MainActivity extends AppCompatActivity
             songs.put("song artist", s.getArtist());
             //songs.put("image", s.getImageSong());
 
-            //guardamos las canciones del usuario
-            firebaseFirestore.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("songs").add(songs);
+            //guardamos las canciones del usuario en la base de datos, aqui estamos guardando solamente datos
+            //firebaseFirestore.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("songs").add(songs);
         }
-
-
-        StorageReference storageReference = firebaseStorage.getReference();
-
-        StorageReference userMusicRef = storageReference.child(userEmail);
-
-
-
-
 
 
     }
@@ -300,22 +326,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private User getUserByEmail(String userId) {
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        Log.d("sergio", "USER ID: " + userId);
-
-        firebaseFirestore.collection("users").document(userId).get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                u = documentSnapshot.toObject(User.class);
-                Log.d("sergio", "USER email: " + u.getEmail());
-            }
-        });
-
-
-        return u;
-    }
+//    private User getUserByEmail(String userId) {
+//
+//        firebaseFirestore = FirebaseFirestore.getInstance();
+//
+//        Log.d("sergio", "USER ID: " + userId);
+//
+//        firebaseFirestore.collection("users").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+//            if (documentSnapshot.exists()) {
+//                u = documentSnapshot.toObject(User.class);
+//                Log.d("sergio", "USER email: " + u.getEmail());
+//            }
+//        });
+//
+//
+//        return u;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

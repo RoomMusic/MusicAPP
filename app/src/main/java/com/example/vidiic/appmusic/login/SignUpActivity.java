@@ -67,25 +67,23 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (!userPass.equals(userPassRep)) {
             Toast.makeText(SignUpActivity.this, "Password fields does not match.", Toast.LENGTH_SHORT).show();
         } else {
-            firebaseAuth.createUserWithEmailAndPassword(userMail, userPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    //los usuarios pueden registrarse con una contraseña
-                    if (task.isSuccessful()) {
-                        //usuario registrado completamente
-                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                        startActivity(intent);
+            firebaseAuth.createUserWithEmailAndPassword(userMail, userPass).addOnCompleteListener(task -> {
 
-                        saveUser(userMail, userPass);
+                //los usuarios pueden registrarse con una contraseña
+                if (task.isSuccessful()) {
+                    //usuario registrado completamente
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                    startActivity(intent);
 
-                        Toast.makeText(SignUpActivity.this, "User Registered Succesfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //usuario ya registrado
-                        Toast.makeText(SignUpActivity.this, "User is already registered.", Toast.LENGTH_SHORT).show();
-                    }
+                    saveUser(userMail, userPass);
 
+                    Toast.makeText(SignUpActivity.this, "User Registered Succesfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    //usuario ya registrado
+                    Toast.makeText(SignUpActivity.this, "User is already registered.", Toast.LENGTH_SHORT).show();
                 }
+
             });
         }
 

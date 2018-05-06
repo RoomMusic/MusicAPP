@@ -41,10 +41,10 @@ public class AsyncTaskSong extends AsyncTask<String, Integer, List<Song>> {
     private byte[] art;
     private Bitmap songimage;
     private static final int MY_PERMISSION_REQUEST = 1;
-    private StorageReference storageReference, songReference;
+
+    private StorageReference storageReference;
     private String email;
     private FirebaseStorage firebaseStorage;
-    private StorageReference songFileReference;
 
 
     public interface WeakReference {
@@ -66,6 +66,7 @@ public class AsyncTaskSong extends AsyncTask<String, Integer, List<Song>> {
 
         songs = new ArrayList<>();
 
+        //obtenemos la instancia de la unidad de almacenamiento
         firebaseStorage = FirebaseStorage.getInstance();
 
         Log.i("Main", "Entramos Async");
@@ -75,6 +76,7 @@ public class AsyncTaskSong extends AsyncTask<String, Integer, List<Song>> {
         Uri songuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
         Cursor songCursor = contentResolver.query(songuri, null, null, null, null);
+
 
         Log.d("sergio", "PATH: " + songuri.getPath());
 
@@ -88,37 +90,32 @@ public class AsyncTaskSong extends AsyncTask<String, Integer, List<Song>> {
             storageReference = firebaseStorage.getReference();
 
 
-
             do {
                 String currentTitle = songCursor.getString(songTitle);
                 String currentArtist = songCursor.getString(songArtist);
                 String currentImae = songCursor.getString(imagen);
 
-                Log.d("sergio","DATA " + currentTitle);
+                Log.d("sergio", "DATA " + currentTitle);
 
-
+                //dividimos la ruta de la imagen por la /
                 String[] fileName = currentImae.split("/");
 
                 //en la posicion 5 tenemos el string del titulo mas la extension .mp3
-                Log.d("sergio","DATA NAME " + fileName[5]);
+                Log.d("sergio", "DATA NAME " + fileName[5]);
 
-//                songReference = storageReference.child(fileName[5]);
-//
-//                songFileReference = storageReference.child(email + "/" + fileName[5]);
-//
-//                //true
-//                songReference.getName().equals(songFileReference.getName());
-//
-//                //false
-//                songReference.getPath().equals(songFileReference.getPath());
-
+                //configuramos una ruta para guardar los archivos, esta ruta consistira en el email del usuario mas el nombre del archvio
+                //de esta manera los archivos se guardan por usuario
                 storageReference = firebaseStorage.getReference().child(email + "/" + fileName[5]);
 
                 Uri songFile = Uri.fromFile(new File(currentImae));
 
-                UploadTask uploadTask = storageReference.putFile(songFile);
+                //con uppload task subimos el archivo a firebase
+                //asi se sube y ya esta
+                storageReference.putFile(songFile);
 
-                uploadTask.addOnCompleteListener(task -> Log.d("sergio", "file subido"));
+                //si guardamos en una variable la tarea podremos configurar distintas acciones para las distintas fases de subida de archvios
+                /*UploadTask uploadTask = storageReference.putFile(songFile);*/
+
 
                 mediaMetadataRetriever = new MediaMetadataRetriever();
                 mediaMetadataRetriever.setDataSource(currentImae);
@@ -134,8 +131,8 @@ public class AsyncTaskSong extends AsyncTask<String, Integer, List<Song>> {
                 Log.d("Main", "doInBackground: " + song.toString());
                 songs.add(song);
 
+                break;
             } while (songCursor.moveToNext());
-
 
 
         }
