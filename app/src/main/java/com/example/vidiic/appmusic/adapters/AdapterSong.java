@@ -1,11 +1,8 @@
-package com.example.vidiic.appmusic.songlist;
+package com.example.vidiic.appmusic.adapters;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +43,7 @@ public class AdapterSong extends RecyclerView.Adapter<AdapterSong.ViewHolder> im
             artistaSong = view.findViewById(R.id.nameArtist);
         }
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView =

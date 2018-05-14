@@ -1,21 +1,12 @@
 package com.example.vidiic.appmusic;
 
 import android.Manifest;
-import android.content.ContentResolver;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,35 +19,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 
 import com.example.vidiic.appmusic.classes.Song;
 import com.example.vidiic.appmusic.classes.User;
 import com.example.vidiic.appmusic.login.LoginActivity;
-import com.example.vidiic.appmusic.songlist.AdapterSong;
+import com.example.vidiic.appmusic.adapters.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.chatcamp.sdk.ChatCamp;
+import io.chatcamp.sdk.ChatCampException;
 
 public class MainActivity extends AppCompatActivity
         implements AsyncTaskSong.WeakReference {
@@ -71,9 +56,10 @@ public class MainActivity extends AppCompatActivity
     private String userEmail;
     private User u;
     private String userKey;
-    private User userAux;
+    private User userAux = new User();
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
+    private String url = "";
 
     /* ArrayList<String> arrayList;
      ListView listView;
@@ -84,10 +70,10 @@ public class MainActivity extends AppCompatActivity
 
     AsyncTaskSong asyncTaskSong;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -97,8 +83,24 @@ public class MainActivity extends AppCompatActivity
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
 
+        //obtenemos el email que hemos pasado desde la actividad login
         userEmail = getIntent().getExtras().getString("email");
 
+        //obtenemos la clave de firebase para guardar el usuario con el mismo id en la bbdd del chat api
+        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("sergio", userEmail + " " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        firebaseFirestore.collection("users").document(userKey).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()){
+                userAux = documentSnapshot.toObject(User.class);
+                Log.d("sergio", userAux.getUsername());
+            }else{
+                Log.d("sergio", "no existe");
+            }
+        });
+
+
+        checkUser(userKey);
 
         asyncTaskSong = new AsyncTaskSong(this, userEmail);
 
@@ -107,16 +109,20 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
         bottomNavigationViewHelper.organizeBottomNavigationView(bottomNavigationView, MainActivity.this);
 
+
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.action_folder:
 
-                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
 
                     Toast.makeText(getContext(), "Action folder", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_music:
+                    //conectamos con el servicio pasandole el id y a la vez actualizamos el nombre de usuario que se mostrará en pantalla
+                    ChatCamp.connect(userKey, (user, e) ->
+                            ChatCamp.updateUserDisplayName(userAux.getUsername(), (user1, e1) ->
+                                    Toast.makeText(getContext(), "usuario actualizado", Toast.LENGTH_SHORT).show()));
 
 
                     Toast.makeText(getContext(), "Action music", Toast.LENGTH_SHORT).show();
@@ -154,14 +160,6 @@ public class MainActivity extends AppCompatActivity
             Log.i("Main", "Entramos1");
             asyncTaskSong.execute();
         }
-
-        //obtenemos el email que hemos pasado desde la actividad login
-
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("sergio", userEmail + FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-
-        checkUser(userKey);
 
 
     }

@@ -19,6 +19,9 @@ public class User {
     private Date registerDate;
     private List<Song> songList;
 
+
+    public User(){}
+
     //constructor para cuando el usuario esta registrandose
     public User(String userId, String email, String password, Date registerDate, boolean firstIn) {
         this.userid = userId;

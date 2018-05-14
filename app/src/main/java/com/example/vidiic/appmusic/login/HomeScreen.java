@@ -26,7 +26,7 @@ public class HomeScreen extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen);
-        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin = findViewById(R.id.btnInitSession);
         btnRegistro = findViewById(R.id.btnRegistro);
 
         btnLogin.setOnClickListener(view -> startActivity(new Intent(HomeScreen.this, LoginActivity.class)));

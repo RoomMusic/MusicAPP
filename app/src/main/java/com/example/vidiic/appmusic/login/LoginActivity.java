@@ -18,9 +18,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import io.chatcamp.sdk.ChatCamp;
+
+
 public class LoginActivity extends AppCompatActivity {
 
 
+    private static final String APP_ID = "6401739814005108736";
     private Button btnLogin, btnLogOut;
     private EditText userText, passwordText;
     private FirebaseAuth firebaseAuth;
@@ -38,23 +42,15 @@ public class LoginActivity extends AppCompatActivity {
         /*btnSignUp = findViewById(R.id.btnSignUp);*/
         userText = findViewById(R.id.userText);
         passwordText = findViewById(R.id.passwordText);
-        btnLogOut = findViewById(R.id.btnLogOut);
+
+        //iniciamos la conexion con la app que controla los mensajes
+        ChatCamp.init(this, APP_ID);
 
         userText.setText("stucomtest@gmail.com");
         passwordText.setText("ssoo++");
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerUser();
-            }
-        });
-//        btnLogOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                logOut();
-//            }
-//        });
+        btnLogin.setOnClickListener(view -> registerUser());
+
 
     }
 
@@ -71,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString().trim();
 
 
-
         if (TextUtils.isEmpty(email)){
             Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
 
@@ -83,23 +78,20 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    //el usuario existe en la bbbd, correcto
-                    Toast.makeText(LoginActivity.this, "Success.", Toast.LENGTH_SHORT).show();
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    mainIntent.putExtra("email", email);
-                    startActivity(mainIntent);
-                }else{
-                    //usuario no registrado, redirigir al signup
-                    Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                    startActivity(intent);
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                //el usuario existe en la bbbd, correcto
+                Toast.makeText(LoginActivity.this, "Success.", Toast.LENGTH_SHORT).show();
+                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                mainIntent.putExtra("email", email);
+                startActivity(mainIntent);
+            }else{
+                //usuario no registrado, redirigir al signup
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
 
-                    Toast.makeText(LoginActivity.this, "User not registered. SignUp First", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "User not registered. SignUp First", Toast.LENGTH_SHORT).show();
 
-                }
             }
         });
     }

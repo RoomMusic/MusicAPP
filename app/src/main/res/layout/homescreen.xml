@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnInitSession"
         android:layout_width="237dp"
         android:layout_height="54dp"
         android:layout_alignParentEnd="true"
@@ -22,9 +20,9 @@
         android:id="@+id/btnRegistro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnLogin"
-        android:layout_alignStart="@+id/btnLogin"
-        android:layout_below="@+id/btnLogin"
+        android:layout_alignLeft="@+id/btnInitSession"
+        android:layout_alignStart="@+id/btnInitSession"
+        android:layout_below="@+id/btnInitSession"
         android:layout_marginTop="30dp"
         android:background="@drawable/registrobtn" />
 

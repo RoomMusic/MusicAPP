@@ -95,9 +95,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         User user = new User(key, email, pass, new Date(), false);
 
-        firebaseFirestore.collection("users").document(key).set(user).
-                addOnSuccessListener(aVoid -> Toast.makeText(SignUpActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show()).
-                addOnFailureListener(e -> Toast.makeText(SignUpActivity.this, "Fallo", Toast.LENGTH_SHORT).show());
+        firebaseFirestore.collection("users").document(key).set(user).addOnSuccessListener(aVoid ->
+                Toast.makeText(SignUpActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show()).addOnFailureListener(e ->
+                Toast.makeText(SignUpActivity.this, "Fallo", Toast.LENGTH_SHORT).show());
 
     }
 }
