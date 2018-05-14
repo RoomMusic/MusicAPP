@@ -39,7 +39,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-firestore:11.8.0'
     compile 'com.google.firebase:firebase-storage:11.8.0'
-    compile 'io.chatcamp.sdk:chatcamp-android-sdk:0.1.10'
+    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.58'
 
 }
 

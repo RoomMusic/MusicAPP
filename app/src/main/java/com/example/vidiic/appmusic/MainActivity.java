@@ -40,8 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.chatcamp.sdk.ChatCamp;
-import io.chatcamp.sdk.ChatCampException;
 
 public class MainActivity extends AppCompatActivity
         implements AsyncTaskSong.WeakReference {
@@ -119,11 +117,10 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getContext(), "Action folder", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_music:
-                    //conectamos con el servicio pasandole el id y a la vez actualizamos el nombre de usuario que se mostrará en pantalla
-                    ChatCamp.connect(userKey, (user, e) ->
-                            ChatCamp.updateUserDisplayName(userAux.getUsername(), (user1, e1) ->
-                                    Toast.makeText(getContext(), "usuario actualizado", Toast.LENGTH_SHORT).show()));
 
+
+
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
 
                     Toast.makeText(getContext(), "Action music", Toast.LENGTH_SHORT).show();
                     break;
@@ -359,13 +356,13 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.update:
                 break;
-            case R.id.log_out:
-                if (firebaseAuth.getCurrentUser() != null) {
-                    firebaseAuth.signOut();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    Toast.makeText(MainActivity.this, "Sesion cerrada.", Toast.LENGTH_SHORT).show();
-                }
-                break;
+//            case R.id.log_out:
+//                if (firebaseAuth.getCurrentUser() != null) {
+//                    firebaseAuth.signOut();
+//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//                    Toast.makeText(MainActivity.this, "Sesion cerrada.", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }

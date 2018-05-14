@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+
 
 
 public class AboutActivity extends AppCompatActivity {
@@ -36,14 +41,17 @@ public class AboutActivity extends AppCompatActivity {
         button = findViewById(R.id.button_chatbox_send);
 
 
-
         button.setOnClickListener(v -> {
 
         });
 
+        //conectamos con el servicio pasandole el id y a la vez actualizamos el nombre de usuario que se mostrará en pantalla
+
+
+        //abrimos canal, esta opcion estara puesta cuando vayamos a enviar datos o entremos para recibir datos
+
+
         //button = findViewById(R.id.button2);
-
-
 
 
     }

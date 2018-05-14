@@ -18,13 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import io.chatcamp.sdk.ChatCamp;
 
 
 public class LoginActivity extends AppCompatActivity {
 
 
-    private static final String APP_ID = "6401739814005108736";
+    private static final String APP_ID = "";
     private Button btnLogin, btnLogOut;
     private EditText userText, passwordText;
     private FirebaseAuth firebaseAuth;
@@ -44,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordText);
 
         //iniciamos la conexion con la app que controla los mensajes
-        ChatCamp.init(this, APP_ID);
+
 
         userText.setText("stucomtest@gmail.com");
         passwordText.setText("ssoo++");

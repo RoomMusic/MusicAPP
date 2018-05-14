@@ -21,7 +21,7 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url "https://maven.google.com"}
-        maven { url "https://raw.githubusercontent.com/ChatCamp/ChatCamp-Android-SDK/master/" }
+        maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
     }
 }
 
