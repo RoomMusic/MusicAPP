@@ -71,6 +71,8 @@ public class AdapterSong extends RecyclerView.Adapter<AdapterSong.ViewHolder> im
     public void setOnClickListener(View.OnClickListener listener){
         this.listener=listener;
     }
+
+
     @Override
     public void onClick(View view) {
         if (listener!=null){

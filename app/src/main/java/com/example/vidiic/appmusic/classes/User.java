@@ -1,5 +1,7 @@
 package com.example.vidiic.appmusic.classes;
 
+import android.widget.ImageView;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,17 +12,23 @@ import java.util.List;
 public class User {
 
     private String userid;
-    private String username;
+    private String nickName;
     private String email;
     private String password;
     private String userName;
     private String userSecondName;
     private boolean firstIn;
+    private ImageView userImage;
     private Date registerDate;
     private List<Song> songList;
 
 
     public User(){}
+
+    //constructor para cuando obtnemos los usuarios para ser mostrados en la lista del chat
+    public User(String userName){
+        this.nickName = userName;
+    }
 
     //constructor para cuando el usuario esta registrandose
     public User(String userId, String email, String password, Date registerDate, boolean firstIn) {
@@ -31,6 +39,14 @@ public class User {
         this.firstIn = firstIn;
     }
 
+    public ImageView getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(ImageView userImage) {
+        this.userImage = userImage;
+    }
+
     public String getUserid() {
         return userid;
     }
@@ -39,12 +55,12 @@ public class User {
         this.userid = userid;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getEmail() {

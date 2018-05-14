@@ -24,13 +24,10 @@ import android.widget.Toast;
 
 import com.example.vidiic.appmusic.classes.Song;
 import com.example.vidiic.appmusic.classes.User;
-import com.example.vidiic.appmusic.login.LoginActivity;
 import com.example.vidiic.appmusic.adapters.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -91,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         firebaseFirestore.collection("users").document(userKey).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()){
                 userAux = documentSnapshot.toObject(User.class);
-                Log.d("sergio", userAux.getUsername());
+                Log.d("sergio", "NICKNAME: " + userAux.getNickName());
             }else{
                 Log.d("sergio", "no existe");
             }
@@ -120,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    startActivity(new Intent(MainActivity.this, SocialActivity.class));
 
                     Toast.makeText(getContext(), "Action music", Toast.LENGTH_SHORT).show();
                     break;

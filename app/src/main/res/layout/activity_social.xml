@@ -7,10 +7,15 @@
     tools:context=".SocialActivity">
 
 
+
+
    <android.support.v7.widget.RecyclerView
        android:id="@+id/rvChatUser"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentStart="true"
+       android:layout_alignParentLeft="true">
 
 
    </android.support.v7.widget.RecyclerView>
