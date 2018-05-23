@@ -25,7 +25,8 @@
         <activity android:name=".login.SignUpActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".SocialActivity"></activity>
+        <activity android:name=".SocialActivity" />
+        <activity android:name=".chat.ChatActivity"></activity>
     </application>
 
 </manifest>

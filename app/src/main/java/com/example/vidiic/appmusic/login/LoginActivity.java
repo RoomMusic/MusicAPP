@@ -14,26 +14,26 @@ import com.example.vidiic.appmusic.MainActivity;
 import com.example.vidiic.appmusic.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.sendbird.android.SendBird;
 
 
 public class LoginActivity extends AppCompatActivity {
 
 
-    private static final String APP_ID = "";
     private Button btnLogin, btnLogOut;
     private EditText userText, passwordText;
     private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //FirebaseApp.initializeApp(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

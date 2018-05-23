@@ -27,11 +27,15 @@ import com.example.vidiic.appmusic.classes.User;
 import com.example.vidiic.appmusic.adapters.AdapterSong;
 import com.example.vidiic.appmusic.songlist.AsyncTaskSong;
 import com.example.vidiic.appmusic.utils.BottomNavigationViewHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.sendbird.android.SendBird;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         implements AsyncTaskSong.WeakReference {
 
     private static final int MY_PERMISSION_REQUEST = 1;
+    private static final String APP_ID = "60DA930F-248F-479A-B406-028DEF5060D7";
 
     List<Song> songs;
     RecyclerView rcSongs;
@@ -78,6 +83,8 @@ public class MainActivity extends AppCompatActivity
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
 
+        SendBird.init(APP_ID, this.getApplicationContext());
+
         //obtenemos el email que hemos pasado desde la actividad login
         userEmail = getIntent().getExtras().getString("email");
 
@@ -85,11 +92,11 @@ public class MainActivity extends AppCompatActivity
         userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Log.d("sergio", userEmail + " " + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        firebaseFirestore.collection("users").document(userKey).get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()){
-                userAux = documentSnapshot.toObject(User.class);
+        firebaseFirestore.collection("users").document(userKey).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                userAux = task.getResult().toObject(User.class);
                 Log.d("sergio", "NICKNAME: " + userAux.getNickName());
-            }else{
+            } else {
                 Log.d("sergio", "no existe");
             }
         });
@@ -114,7 +121,6 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getContext(), "Action folder", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_music:
-
 
 
                     startActivity(new Intent(MainActivity.this, SocialActivity.class));

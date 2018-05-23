@@ -3,6 +3,6 @@
     android:shape="oval">
 
     <!-- View background color -->
-    <solid android:color="@color/colorPrimary"></solid>
+    <solid android:color="@color/colorPrimary"/>
 
 </shape>

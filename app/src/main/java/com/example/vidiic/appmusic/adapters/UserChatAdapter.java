@@ -2,6 +2,7 @@ package com.example.vidiic.appmusic.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,54 +14,87 @@ import com.example.vidiic.appmusic.classes.User;
 
 import java.util.List;
 
-public class UserChatAdapter  extends RecyclerView.Adapter<UserChatAdapter.ViewHolder>{
+public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHolder> {
 
 
     private List<User> userList;
-    Context context;
 
 
-    public UserChatAdapter(Context context, List<User> userList){
-        this.context = context;
+    public UserChatAdapter(List<User> userList) {
+        super();
         this.userList = userList;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder{
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+
+    class UserViewHolder extends ViewHolder {
 
         ImageView userImage;
         TextView userName, lastMessageText;
+        User user;
 
-        public ViewHolder(View itemView) {
+        public UserViewHolder(View itemView) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.userChatName);
             userImage = itemView.findViewById(R.id.userChatImage);
             lastMessageText = itemView.findViewById(R.id.lastMessage);
+
+            itemView.setOnClickListener(v -> {
+                //comprobamos que el usuario no es null, si es null salimos de la funcion
+                //Log.d("sergio", "   LLEGOOOO");
+                if (user == null) return;
+                //Log.d("sergio", "   LLEGOOOO OTRA VEEEZ");
+                if (listener != null) listener.itemClicked(v, user);
+            });
         }
     }
 
+    public interface OnItemClickListener {
+        void itemClicked(View view, User user);
+    }
+
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View userChatItem = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.item_user_chat, parent, false);
 
-
-        return new ViewHolder(userChatItem);
+        return new UserViewHolder(userChatItem);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         User user = userList.get(position);
 
-        if (user.getUserImage() != null){
-            holder.userImage.setImageBitmap(user.getUserImage().getDrawingCache());
-        }else{
-            holder.userImage.setImageResource(R.drawable.ic_action_music);
+        UserViewHolder vh = (UserViewHolder) holder;
+
+        //pasamos el usuario obtenido de la lista al holder para cuando haga click no reciba un null y no entre al listener
+        vh.user = user;
+
+        if (user.getUserImage() != null) {
+            vh.userImage.setImageBitmap(user.getUserImage().getDrawingCache());
+        } else {
+            vh.userImage.setImageResource(R.drawable.ic_action_music);
         }
-        holder.userName.setText(user.getNickName());
-        holder.lastMessageText.setText("Great Spirit....");
+
+        vh.userName.setText(user.getNickName());
+        Log.d("sergio", "USERNAME CHAT: " + user.getNickName());
+        vh.lastMessageText.setText("Great Spirit....");
     }
 
     @Override
