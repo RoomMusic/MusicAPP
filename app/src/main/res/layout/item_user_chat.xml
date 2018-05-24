@@ -23,17 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:text="user name"
+            android:textSize="15dp"
             android:textAlignment="textStart"
             android:gravity="start" />
-
-        <TextView
-            android:id="@+id/lastMessage"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_below="@id/userChatName"
-            android:text="last message"
-            android:textAlignment="textStart"
-            android:gravity="start"/>
 
     </RelativeLayout>
 

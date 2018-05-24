@@ -36,7 +36,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     class UserViewHolder extends ViewHolder {
 
         ImageView userImage;
-        TextView userName, lastMessageText;
+        TextView userName;
         User user;
 
         public UserViewHolder(View itemView) {
@@ -44,7 +44,6 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
             userName = itemView.findViewById(R.id.userChatName);
             userImage = itemView.findViewById(R.id.userChatImage);
-            lastMessageText = itemView.findViewById(R.id.lastMessage);
 
             itemView.setOnClickListener(v -> {
                 //comprobamos que el usuario no es null, si es null salimos de la funcion
@@ -94,7 +93,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
         vh.userName.setText(user.getNickName());
         Log.d("sergio", "USERNAME CHAT: " + user.getNickName());
-        vh.lastMessageText.setText("Great Spirit....");
+        //vh.lastMessageText.setText("Great Spirit....");
     }
 
     @Override
