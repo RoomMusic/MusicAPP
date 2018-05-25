@@ -27,6 +27,20 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SocialActivity" />
         <activity android:name=".chat.ChatActivity"></activity>
+
+
     </application>
+
+
+    <!--<supports-screens-->
+        <!--android:anyDensity="true"-->
+        <!--android:compatibleWidthLimitDp="25"-->
+        <!--android:largeScreens="true"-->
+        <!--android:largestWidthLimitDp="25"-->
+        <!--android:normalScreens="true"-->
+        <!--android:requiresSmallestWidthDp="25"-->
+        <!--android:resizeable="true"-->
+        <!--android:smallScreens="true"-->
+        <!--android:xlargeScreens="true" />-->
 
 </manifest>

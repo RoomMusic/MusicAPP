@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -22,7 +23,6 @@ import com.sendbird.android.SendBird;
 import com.sendbird.android.SendBirdException;
 import com.sendbird.android.UserMessage;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,6 @@ public class ChatActivity extends AppCompatActivity {
     private String channelURL;
     private RecyclerView rvChat;
     private MessageListAdapter messageListAdapter;
-    private List<BaseMessage> baseMessageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,9 @@ public class ChatActivity extends AppCompatActivity {
         Button btnSendMessage = findViewById(R.id.button_chatbox_send);
         EditText messageText = findViewById(R.id.edittext_chatbox);
         rvChat = findViewById(R.id.reyclerview_message_list);
+
+        //linea para cuando el teclado aparezca, el recycler view o la vista que haya se suba con el teclado y no se solape
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         Intent socialIntent = getIntent();
 
@@ -67,6 +69,9 @@ public class ChatActivity extends AppCompatActivity {
             PreviousMessageListQuery previousMessageListQuery = groupChannel.createPreviousMessageListQuery();
 
             previousMessageListQuery.load(20, false, (list, e12) -> {
+
+                rvChat.smoothScrollToPosition(list.size() - 1);
+
                 if (e12 != null) return;
                 for (BaseMessage b : list) {
                     Log.d("sergio", "mensaje previos " + ((UserMessage) b).getMessage());
@@ -120,6 +125,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         });
+
 
 
 

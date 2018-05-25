@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vidiic.appmusic.adapters.UserChatAdapter;
@@ -38,6 +39,7 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
     private List<User> userList;
     private User appUser;
     private static final String ACCESS_TOKEN = "866684193dd70a96b701dff98180201f064eca21";
+    private EditText searchUser;
 
 
     @Override
@@ -49,6 +51,7 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
         rv = findViewById(R.id.rvChatUser);
         userList = new ArrayList<>();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        searchUser = findViewById(R.id.searchUserEditText);
 
 
         SendBird.init(APP_ID, this);
