@@ -2,6 +2,7 @@ package com.example.vidiic.appmusic.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +10,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vidiic.appmusic.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sendbird.android.BaseMessage;
 import com.sendbird.android.SendBird;
 import com.sendbird.android.UserMessage;
 import com.squareup.okhttp.internal.Util;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 //adaptador para el recycler view del chat, lo que haces es detectar si propietario del mensaje es el que envia o recibe para presentarlos en distintos layouts
 public class MessageListAdapter extends RecyclerView.Adapter {
+
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     private Context mContext;
     private List<BaseMessage> mMessageList;
 
+
+
     public MessageListAdapter(Context context, List<BaseMessage> messageList) {
         mContext = context;
         mMessageList = messageList;
     }
+
 
     @Override
     public int getItemCount() {
@@ -40,7 +47,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         UserMessage message = (UserMessage) mMessageList.get(position);
 
-        if (message.getSender().getUserId().equals(SendBird.getCurrentUser().getUserId())) {
+        if (message.getSender().getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -81,6 +88,17 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    private static String formatDateTime(long fechaMensaje) {
+
+        //Date fecha = new Date(fechaMensaje * 1000);
+
+        Date fecha = new Date();
+
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+
+        return hourFormat.format(fecha);
+    }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
@@ -88,14 +106,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.text_message_body);
-            timeText =  itemView.findViewById(R.id.text_message_time);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
         void bind(UserMessage message) {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            //timeText.setText(U.formatDateTime(message.getCreatedAt()));
+            timeText.setText(MessageListAdapter.formatDateTime(message.getCreatedAt()));
+
+
         }
     }
 
@@ -107,9 +127,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText =  itemView.findViewById(R.id.text_message_body);
+            messageText = itemView.findViewById(R.id.text_message_body);
             timeText = itemView.findViewById(R.id.text_message_time);
-            nameText =  itemView.findViewById(R.id.text_message_name);
+            nameText = itemView.findViewById(R.id.text_message_name);
             profileImage = itemView.findViewById(R.id.image_message_profile);
         }
 
@@ -117,7 +137,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
+            timeText.setText(MessageListAdapter.formatDateTime(message.getCreatedAt()));
 
             nameText.setText(message.getSender().getNickname());
 

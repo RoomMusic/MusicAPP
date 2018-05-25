@@ -1,6 +1,7 @@
 package com.example.vidiic.appmusic.chat;
 
 import android.content.Intent;
+import android.support.constraint.solver.widgets.ConstraintAnchor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +40,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        Button btnSendMessage = findViewById(R.id.button_chatbox_send);
+        Button btnSendMessage = findViewById(R.id.button_chatbox_send),
+                sendFile = findViewById(R.id.sendFilesBtn);
+
         EditText messageText = findViewById(R.id.edittext_chatbox);
         rvChat = findViewById(R.id.reyclerview_message_list);
 
@@ -68,14 +71,14 @@ public class ChatActivity extends AppCompatActivity {
 
             PreviousMessageListQuery previousMessageListQuery = groupChannel.createPreviousMessageListQuery();
 
-            previousMessageListQuery.load(20, false, (list, e12) -> {
+            previousMessageListQuery.load(30, false, (list, e12) -> {
 
-                rvChat.smoothScrollToPosition(list.size() - 1);
+                rvChat.scrollToPosition(list.size() - 1);
 
                 if (e12 != null) return;
-                for (BaseMessage b : list) {
-                    Log.d("sergio", "mensaje previos " + ((UserMessage) b).getMessage());
-                }
+//                for (BaseMessage b : list) {
+//                    Log.d("sergio", "mensaje previos " + ((UserMessage) b).getMessage());
+//                }
 
                 messageListAdapter = new MessageListAdapter(ChatActivity.this, list);
                 rvChat.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
@@ -93,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
                             list.add(baseMessage);
 
                             messageListAdapter.notifyDataSetChanged();
-                            rvChat.smoothScrollToPosition(list.size() - 1);
+                            rvChat.scrollToPosition(list.size() - 1);
                             Log.d("sergio", "NOTIFY DATA SET CHANGED");
 
 
@@ -101,6 +104,13 @@ public class ChatActivity extends AppCompatActivity {
 
                         }
                     }
+                });
+
+                String url = "https://firebasestorage.googleapis.com/v0/b/roomusic-3eaf7.appspot.com/o/bruizfernandez%40gmail.com%2FMedia?alt=media&token=c7d5a56b-6031-4fad-831f-6f71387516f3";
+
+
+                sendFile.setOnClickListener(v -> {
+                    //groupChannel.sendFileMessage(url, "test", "audio/mpeg", );
                 });
 
                 btnSendMessage.setOnClickListener(view -> {
@@ -113,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             list.add(userMessage);
                             messageListAdapter.notifyDataSetChanged();
-                            rvChat.smoothScrollToPosition(list.size() - 1);
+                            rvChat.scrollToPosition(list.size() - 1);
 
                             //borrar texto escrito por el usuario
                             messageText.setText("");
