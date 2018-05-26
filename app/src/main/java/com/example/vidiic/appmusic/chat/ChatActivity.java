@@ -27,6 +27,7 @@ import com.sendbird.android.UserMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -102,6 +103,8 @@ public class ChatActivity extends AppCompatActivity {
 
                         } else if (baseMessage instanceof FileMessage) {
 
+
+
                         }
                     }
                 });
@@ -119,7 +122,10 @@ public class ChatActivity extends AppCompatActivity {
 
                         groupChannel.sendUserMessage(messageText.getText().toString(), (userMessage, e1) -> {
                             if (e1 != null) Log.d("sergio", "error al enviar mensaje");
-                            Log.d("sergio", "exito al enviar mensaje");
+
+
+                            Log.d("sergio", "exito al enviar mensaje" + new Date(userMessage.getCreatedAt()));
+                            Log.d("sergio", "exito al enviar mensaje" + userMessage.getCreatedAt());
 
                             list.add(userMessage);
                             messageListAdapter.notifyDataSetChanged();

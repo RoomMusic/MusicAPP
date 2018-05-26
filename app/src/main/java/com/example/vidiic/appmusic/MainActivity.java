@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity
     private User u;
     private String userKey;
     private User userAux = new User();
-    private StorageReference storageReference;
-    private FirebaseStorage firebaseStorage;
+    //private StorageReference storageReference;
+    //private FirebaseStorage firebaseStorage;
     private String url = "";
 
     /* ArrayList<String> arrayList;
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity
      ArrayAdapter<String> adapter;
      MediaMetadataRetriever mediaMetadataRetriever;
      byte[] art;*/
-
 
     AsyncTaskSong asyncTaskSong;
 
@@ -81,9 +80,9 @@ public class MainActivity extends AppCompatActivity
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        //firebaseStorage = FirebaseStorage.getInstance();
 
-        SendBird.init(APP_ID, this.getApplicationContext());
+        //SendBird.init(APP_ID, this.getApplicationContext());
 
         //obtenemos el email que hemos pasado desde la actividad login
         userEmail = getIntent().getExtras().getString("email");

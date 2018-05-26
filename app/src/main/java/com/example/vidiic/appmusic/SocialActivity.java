@@ -69,12 +69,12 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
                 SendBird.connect(appUser.getUserid(), "", (user, e) -> {
                     if (e != null) {
 
-                        Toast.makeText(SocialActivity.this, "ERROR: " + e.getCode(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SocialActivity.this, "ERROR: " + e.getCode(), Toast.LENGTH_SHORT).show();
                         Log.d("sergio", "CODIGO ERROR: " + e.getStackTrace()[0]);
                         return;
                     }
 
-                    Toast.makeText(SocialActivity.this, "USUARIO CONECTADO", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SocialActivity.this, "USUARIO CONECTADO", Toast.LENGTH_SHORT).show();
 
                     SendBird.updateCurrentUserInfo(appUser.getNickName(), null, e1 ->
                             Toast.makeText(SocialActivity.this, "USUARIO ACTUALIZADO" + appUser.getNickName(), Toast.LENGTH_SHORT).show());
@@ -92,13 +92,13 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
                     //condicion para evitar que el usuario que esta usando la app le aparezca su usuario en las listas de amigos
                     if (!documentSnapshot.toObject(User.class).getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         userList.add(documentSnapshot.toObject(User.class));
-                        Log.d("sergio", "USUARIO AÑADIDO " + documentSnapshot.toObject(User.class).getNickName());
+                        //Log.d("sergio", "USUARIO AÑADIDO " + documentSnapshot.toObject(User.class).getNickName());
                     }
 
                 }
 
                 userChatAdapter = new UserChatAdapter(userList);
-                userChatAdapter.setOnItemClickListener(this);
+
 
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                         getApplicationContext()
@@ -108,7 +108,7 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
                 rv.setItemAnimator(new DefaultItemAnimator());
 
                 rv.setAdapter(userChatAdapter);
-                userChatAdapter.setOnItemClickListener(this);
+                userChatAdapter.setOnItemClickListener(SocialActivity.this);
 
                 //Log.d("sergio", "LLEGO AHORA");
 
@@ -120,7 +120,7 @@ public class SocialActivity extends AppCompatActivity implements UserChatAdapter
 
     @Override
     public void itemClicked(View view, User user) {
-        Toast.makeText(view.getContext(), "User ID" + user.getUserid(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(view.getContext(), "User ID" + user.getUserid(), Toast.LENGTH_SHORT).show();
 
         //Log.d("sergio", "CLICK USUARIO");
 
